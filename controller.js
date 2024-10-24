@@ -3,7 +3,7 @@ function handleCommand(command) {
 
     switch (cmd.toLowerCase()) {
         case 'help':
-            return 'Available commands: help, exit, ls, cd <directory>, about, skills, experience, projects, contact';
+            return 'Available commands: help, exit, ls, cd <directory>, cat <file>';
         case 'exit':
             return 'Goodbye!';
         case 'ls':
@@ -16,6 +16,7 @@ function handleCommand(command) {
             return `Unknown command: "${command}". Type 'help' for a list of available commands.`;
     }
 }
+
 
 let currentPath = '/';
 
@@ -42,19 +43,8 @@ const fileSystem = {
     }
 };
 
-function getCurrentDirectoryName() {
-    return currentPath === '/' ? 'home' : currentPath.split('/').pop();
-}
-
-function displayPrompt() {
-    const promptElement = document.querySelector('.prompt');
-    const displayPath = currentPath === '/' ? '/' : currentPath.replace('/', '');
-    promptElement.textContent = `${displayPath}>`;
-}
-
 function ls() {
     const currentDir = getCurrentDirectory();
-
     if (currentDir && currentDir.type === 'directory') {
         return Object.keys(currentDir.contents).join('\n');
     } else {
@@ -68,20 +58,36 @@ function cd(directory) {
     if (directory === '..') {
         const parentPath = currentPath.split('/').slice(0, -1).join('/');
         currentPath = parentPath === '' ? '/' : parentPath;
-        displayPrompt();
         return `Changed directory to ${currentPath}`;
     }
 
     if (currentDir && currentDir.type === 'directory' && currentDir.contents[directory]) {
         if (currentDir.contents[directory].type === 'directory') {
             currentPath += (currentPath === '/' ? '' : '/') + directory;
-            displayPrompt();
             return `Changed directory to ${currentPath}`;
         } else {
             return `${directory} is not a directory.`;
         }
     } else {
         return `No such directory: ${directory}`;
+    }
+}
+
+function cat(filename) {
+    const currentDir = getCurrentDirectory();
+    if (currentDir && currentDir.type === 'directory') {
+        if (currentDir.contents[filename]) {
+            const file = currentDir.contents[filename];
+            if (file.type === 'file') {
+                return file.content;
+            } else {
+                return `${filename} is not a file.`;
+            }
+        } else {
+            return `No such file: ${filename}`;
+        }
+    } else {
+        return 'Not a directory.';
     }
 }
 
@@ -99,23 +105,11 @@ function getCurrentDirectory() {
     return currentDir;
 }
 
-function cat(filename) {
-    const currentDir = getCurrentDirectory();
-
-    if (currentDir && currentDir.type === 'directory') {
-        if (currentDir.contents[filename]) {
-            const file = currentDir.contents[filename];
-            if (file.type === 'file') {
-                return file.content;
-            } else {
-                return `${filename} is not a file.`;
-            }
-        } else {
-            return `No such file: ${filename}`;
-        }
-    } else {
-        return 'Not a directory.';
-    }
+function displayPrompt() {
+    const promptElement = document.getElementById('prompt');
+    const displayPath = currentPath === '/' ? '/' : currentPath.replace('/', ''); 
+    promptElement.textContent = `${displayPath}> `; // Show current directory without leading slash
 }
 
+// Initialize the prompt
 displayPrompt();

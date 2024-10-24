@@ -1,37 +1,43 @@
 const textContainer = document.getElementById('textContainer');
 const prompt = document.getElementById('prompt');
 
+
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         const input = event.target.innerText.trim();
         if (input) {
-            const inputElement = event.target;
-            inputElement.innerText = '';
-
+            const promptElement = document.getElementById('prompt');
             const textElement = document.createElement('p');
-            textElement.textContent = `${prompt.textContent} ${input}`;
-            textContainer.append(textElement);
 
-            typeOutResponse(handleCommand(input));
+            textElement.innerHTML = `<span class="prompt">${promptElement.textContent}</span> <span class="input">${input}</span>`;
+            document.getElementById('textContainer').appendChild(textElement);
+
+            event.target.innerText = '';
+
+            const responseText = handleCommand(input);
+            typeOutResponse(responseText);
+            displayPrompt();
         }
     }
 }
 
 function typeOutResponse(responseText) {
+    const textContainer = document.getElementById('textContainer');
+    const typingElement = document.createElement('span'); 
+    textContainer.appendChild(typingElement); 
     let index = 0;
-    const typingSpeed = 5;
+    const typingSpeed = 5; 
 
     function typeCharacter() {
         if (index < responseText.length) {
-            const charSpan = document.createElement('span');
-            charSpan.textContent = responseText[index];
-            textContainer.append(charSpan);
+            typingElement.textContent += responseText[index]; 
             index++;
-            setTimeout(typeCharacter, typingSpeed);
+            setTimeout(typeCharacter, typingSpeed); 
         }
     }
-    
-    setTimeout(typeCharacter, 10);
+
+    setTimeout(typeCharacter, 10); 
 }
+
 

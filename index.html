@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLI</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="main.js" defer></script>
     <script src="controller.js" defer></script>
 </head>
 <body>
-    <!-- Div to hold the entered text -->
-    <div id="textContainer"></div>
+    <div class="cli-container">
+        <h1>Auris Prääm</h1>
+        
+        <div id="textContainer" class="output"></div>
 
-    <!-- Create a textbox -->
-    <input type="text" id="myTextbox" placeholder="Type something here...">
-
+        <div class="input-area">
+            <span class="prompt" id="prompt">user></span>
+            <span contenteditable="true" id="myTextbox" class="input" placeholder="Type something here..." onkeypress="handleKeyPress(event)"></span>
+        </div>
+    </div>
 </body>
 </html>

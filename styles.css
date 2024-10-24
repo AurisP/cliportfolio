@@ -1,0 +1,41 @@
+body {
+    background-color: #232b3f;
+    color: #a1a1a1;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 20px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.cli-container {
+    max-width: none;
+    margin: 0;
+}
+
+.output {
+    margin-bottom: 5px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.input-area {
+    display: flex;
+}
+
+.prompt {
+    margin-right: 5px; 
+    color: aqua;
+}
+
+.input {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    color: #ffffff;
+    outline: none;
+    min-width: 50px;
+}
+
+.input-area > input:focus {
+    color: #ffffff;
+}

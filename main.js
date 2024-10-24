@@ -1,22 +1,37 @@
-// Get the textbox and output elements
-const textbox = document.getElementById('myTextbox');
 const textContainer = document.getElementById('textContainer');
+const prompt = document.getElementById('prompt');
 
-// Function to add the text below the textbox
-function addText() {
-    const newText = textbox.value;
-    if (newText) { // Check if there's any input
-        const responseText = handleCommand(newText); // Get response from controller
-        const textElement = document.createElement('p'); // Create a new paragraph element
-        textElement.textContent = responseText; // Set the text content
-        textContainer.append(textElement); // Add the text at the bottom
-        textbox.value = ''; // Clear the textbox
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const input = event.target.innerText.trim();
+        if (input) {
+            const inputElement = event.target;
+            inputElement.innerText = '';
+
+            const textElement = document.createElement('p');
+            textElement.textContent = `${prompt.textContent} ${input}`;
+            textContainer.append(textElement);
+
+            typeOutResponse(handleCommand(input));
+        }
     }
 }
 
-// Add event listener for keypress events
-textbox.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        addText(); // Call the function when Enter is pressed
+function typeOutResponse(responseText) {
+    let index = 0;
+    const typingSpeed = 5;
+
+    function typeCharacter() {
+        if (index < responseText.length) {
+            const charSpan = document.createElement('span');
+            charSpan.textContent = responseText[index];
+            textContainer.append(charSpan);
+            index++;
+            setTimeout(typeCharacter, typingSpeed);
+        }
     }
-});
+    
+    setTimeout(typeCharacter, 10);
+}
+
